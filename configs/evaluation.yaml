@@ -1,0 +1,80 @@
+_base_:
+  - base.yaml
+  - data.yaml
+
+evaluation:
+  split: test
+  batch_size: 16
+  amp: false
+  num_workers: 0
+  border: 4
+  output_dir: results
+  skip_missing: true
+  lpips_net: alex
+  channels_last: false
+
+methods:
+  - name: bicubic
+    type: bicubic
+  - name: cnn
+    type: cnn
+    model_config: configs/cnn.yaml
+    checkpoint: checkpoints/cnn/cnn_gpu/best.pt
+  - name: srgan_pixel_only
+    type: srgan
+    model_config: configs/srgan.yaml
+    checkpoint: checkpoints/srgan/srgan_gpu/pixel_warmup_final.pt
+  - name: srgan_pretrained
+    type: srgan_pretrained
+    model_config: configs/srgan.yaml
+    checkpoint: checkpoints/pretrained/SRGAN_x4-ImageNet.pth.tar
+  - name: srgan_finetuned
+    type: srgan
+    model_config: configs/srgan.yaml
+    checkpoint: checkpoints/srgan/srgan_gpu/best_generator.pth
+  - name: cnn_v2
+    type: cnn
+    model_config: configs/cnn_v2.yaml
+    checkpoint: checkpoints/cnn/cnn_v2/best.pt
+  - name: srgan_v2_pixel_only
+    type: srgan
+    model_config: configs/srgan_v2.yaml
+    checkpoint: checkpoints/srgan/srgan_v2/pixel_warmup_final.pt
+  - name: srgan_v2_finetuned
+    type: srgan
+    model_config: configs/srgan_v2.yaml
+    checkpoint: checkpoints/srgan/srgan_v2/best_generator.pth
+
+comparisons:
+  - [cnn, bicubic]
+  - [srgan_finetuned, bicubic]
+  - [srgan_finetuned, cnn]
+  - [srgan_finetuned, srgan_pretrained]
+  - [srgan_finetuned, srgan_pixel_only]
+  - [srgan_pixel_only, cnn]
+  - [cnn_v2, cnn]
+  - [srgan_v2_finetuned, srgan_finetuned]
+  - [srgan_v2_finetuned, cnn_v2]
+
+bootstrap:
+  num_resamples: 2000
+  confidence: 0.95
+  seed: 42
+
+visual:
+  num_random: 8
+  num_wins: 3
+  num_fails: 3
+  selection_seed: 42
+  zoom_box_size: 64
+  zoom_select: highest_gradient
+  dpi: 150
+  error_map: true
+  reference_methods: [cnn, srgan_finetuned]
+
+inference:
+  tile_size: 128
+  overlap: 16
+  blend: feather
+  amp: false
+  output_format: png

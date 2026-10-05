@@ -1,0 +1,14 @@
+- smoke_cnn_gpu | hash=19944fdec93e | stage=cnn | epochs=1 | psnr=15.27349853515625 | time_s=36.9718247000128 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- smoke_srgan_warmup_gpu | hash=606c4f1d3049 | stage=pixel_warmup | epochs=1 | psnr=28.883068084716797 | time_s=3.606253399979323 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- smoke_srgan_gan_gpu | hash=606c4f1d3049 | stage=gan | epochs=1 | lpips=0.18387586995959282 | time_s=34.779091999982484 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- cnn_gpu | hash=19944fdec93e | stage=cnn | epochs=1 | psnr=n/a | time_s=769.4667194999638 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- srgan_gpu | hash=606c4f1d3049 | stage=all | epochs=8 | psnr=26.34845960998535 | time_s=26152.709827199986 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- cnn_gpu | hash=19944fdec93e | stage=cnn | epochs=30 | psnr=28.72826808166504 | time_s=32371.700725499948 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- smoke_cnn_old | hash=19944fdec93e | stage=cnn | epochs=1 | psnr=23.1764235496521 | time_s=14.866379900020547 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- smoke_cnn_v2 | hash=9ecc452b0d15 | stage=cnn | epochs=1 | psnr=n/a | time_s=30.959720099985134 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- smoke_gan_old | hash=606c4f1d3049 | stage=gan | epochs=1 | lpips=0.16021361574530602 | time_s=25.9121632000315 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- smoke_gan_v2 | hash=607313e8d4a8 | stage=gan | epochs=1 | lpips=0.18412183225154877 | time_s=57.28030290000606 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- smoke_gan_v2_resume | hash=607313e8d4a8 | stage=gan | epochs=2 | lpips=0.18473435938358307 | time_s=45.518693000019994 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- cnn_v2 | hash=9ecc452b0d15 | stage=cnn | epochs=30 | psnr=24.713467864990236 | time_s=17697.863907399995 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- srgan_v2 | hash=607313e8d4a8 | stage=pixel_warmup | epochs=2 | psnr=25.013721221923827 | time_s=1604.8867564999964 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- srgan_v2 | hash=607313e8d4a8 | stage=gan | epochs=8 | lpips=0.14962345778942107 | time_s=22462.084036099957 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU

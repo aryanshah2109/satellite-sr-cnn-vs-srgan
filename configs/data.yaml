@@ -1,0 +1,61 @@
+_base_: base.yaml
+
+dataset:
+  name: satellite
+  raw_root: data/raw
+  hr_dir: satellite/HR_0.5m/HR_0.5m
+  lr_dir: satellite/LR_2m/LR_2m
+  file_extension: .tif
+  scale_factor: 4
+  shape_tolerance: 1.0
+
+bands:
+  indices: [0, 1, 2]
+  expected_dtype: uint8
+  max_value: auto
+
+lr_source: provided
+
+split:
+  seed: 42
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  stratify_by_city: true
+  city_regex: ^(?P<city>[A-Za-z]+(?:-[A-Za-z]+)?)(?P<index>\d+)$
+
+patching:
+  hr_patch_size: 256
+  hr_stride:
+    train: 256
+    val: 256
+    test: 256
+  max_nodata_fraction: 0.05
+  min_patch_std: 0.001
+  output_format: npy
+
+training_crop:
+  hr_crop_size: 256
+  augment_flip: true
+  augment_rot90: true
+
+degradation:
+  kernel: bicubic
+  blur_sigma_range: null
+  noise_sigma_range: null
+  jpeg_quality_range: null
+
+dataloader:
+  batch_size: 2
+  num_workers: 0
+  pin_memory: false
+  persistent_workers: false
+
+manifest:
+  compute_sha256: false
+
+alignment:
+  sample_count: 8
+  seed: 42
+  min_psnr: 20.0
+  max_plots: 3

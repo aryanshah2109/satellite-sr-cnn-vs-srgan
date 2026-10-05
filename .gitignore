@@ -1,0 +1,41 @@
+# env
+.venv/
+.env
+
+# caches
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.vscode/
+.DS_Store
+
+# data (keep the generated data card)
+data/*
+!data/README.md
+
+# training artifacts
+logs/
+runs/
+
+# checkpoints (keep only the source note)
+checkpoints/*
+!checkpoints/pretrained/
+checkpoints/pretrained/*
+!checkpoints/pretrained/SOURCE.md
+
+# large binaries
+*.pt
+*.pth
+*.tar
+*.tif
+*.tiff
+*.npy
+
+*.egg-info/
+results/smoke/
+results/smoke_inference/
+results/metrics/per_image.csv
+results/comparisons/random/

@@ -1,0 +1,41 @@
+seed: 42
+deterministic: false
+
+paths:
+  data_root: data
+  raw_dir: data/raw
+  processed_dir: data/processed
+  splits_dir: data/splits
+  checkpoints_dir: checkpoints
+  pretrained_dir: checkpoints/pretrained
+  runs_dir: runs
+  logs_dir: logs
+  results_dir: results
+  docs_dir: docs
+
+logging:
+  level: INFO
+  console_level: INFO
+  file_level: DEBUG
+  log_to_file: true
+  format: "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+  date_format: "%Y-%m-%d %H:%M:%S"
+  max_bytes: 10485760
+  backup_count: 5
+
+image:
+  scale_factor: 4
+  rgb_range: 1.0
+  y_channel_coefficients: [0.299, 0.587, 0.114]
+  y_offset: 0.0
+  eval_border_crop: 4
+  supported_extensions: [.png, .jpg, .jpeg, .bmp, .tif, .tiff, .webp]
+
+device:
+  preferred: auto
+
+checkpoint:
+  best_filename: best.pt
+  last_filename: last.pt
+  save_optimizer: true
+  keep_last_n: 3

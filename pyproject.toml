@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cnn-vs-finetuned-srgan"
+version = "0.1.0"
+description = "A reproducible CNN and fine-tuned SRGAN comparison study."
+requires-python = ">=3.10"
+dependencies = [
+    "torch==2.14.1",
+    "torchvision==0.29.1",
+    "numpy==2.5.3",
+    "Pillow==12.3.0",
+    "PyYAML==6.0.3",
+    "tqdm==4.70.1",
+    "tensorboard==2.21.0",
+    "scikit-image==0.26.0",
+    "lpips==0.1.4",
+    "matplotlib==3.11.2",
+    "tifffile==2026.9.20",
+    "imagecodecs==2026.8.16",
+]
+
+[tool.setuptools]
+packages = [
+    "utils",
+    "models",
+    "losses",
+    "training",
+    "evaluation",
+    "inference",
+    "sr_datasets",
+    "scripts",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+skip_glob = [".venv/*", "data/*", ".mypy_cache/*", ".ruff_cache/*", "*.egg-info/*", "logs/*", "runs/*", "checkpoints/*"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+exclude = [".venv", "data", "notebooks", ".mypy_cache", ".ruff_cache", "*.egg-info", "logs", "runs", "checkpoints"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "ANN", "D"]
+ignore = ["D100", "D104", "D105", "D107", "D203", "D213", "D413", "ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN001", "D103"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+ignore_missing_imports = true
+no_site_packages = true
+follow_imports = "skip"
+disable_error_code = ["import-untyped"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
