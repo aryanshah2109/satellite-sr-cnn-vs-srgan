@@ -25,6 +25,8 @@ checkpoints/*
 !checkpoints/pretrained/
 checkpoints/pretrained/*
 !checkpoints/pretrained/SOURCE.md
+checkpoints/**/*.pt
+checkpoints/**/*.pth
 
 # large binaries
 *.pt

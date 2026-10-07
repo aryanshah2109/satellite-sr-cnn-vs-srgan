@@ -237,13 +237,14 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--max-iters", type=int, default=None)
     parser.add_argument("--val-subset", type=int, default=None)
     parser.add_argument("--device", default=None)
+    parser.add_argument("--seed", type=int, default=None)
     return parser.parse_args()
 
 
 def main() -> int:
     """Run CNN training."""
     args = _parse_args()
-    cfg = load_config(args.config)
+    cfg = load_config(args.config, {"seed": args.seed} if args.seed is not None else None)
     args.run_name = args.run_name or str(cfg.training.run_name)
     setup_logging(cfg, args.run_name)
     try:

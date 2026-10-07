@@ -35,15 +35,15 @@ methods:
   - name: cnn_v2
     type: cnn
     model_config: configs/cnn_v2.yaml
-    checkpoint: checkpoints/cnn/cnn_v2/best.pt
+    checkpoint: checkpoints/cnn/cnn_v2_fixed/best.pt
   - name: srgan_v2_pixel_only
     type: srgan
     model_config: configs/srgan_v2.yaml
-    checkpoint: checkpoints/srgan/srgan_v2/pixel_warmup_final.pt
+    checkpoint: checkpoints/srgan/srgan_v2_fixed/pixel_warmup_final.pt
   - name: srgan_v2_finetuned
     type: srgan
     model_config: configs/srgan_v2.yaml
-    checkpoint: checkpoints/srgan/srgan_v2/best_generator.pth
+    checkpoint: checkpoints/srgan/srgan_v2_fixed/best_generator.pth
 
 comparisons:
   - [cnn, bicubic]
@@ -55,6 +55,7 @@ comparisons:
   - [cnn_v2, cnn]
   - [srgan_v2_finetuned, srgan_finetuned]
   - [srgan_v2_finetuned, cnn_v2]
+  - [srgan_v2_pixel_only, cnn_v2]
 
 bootstrap:
   num_resamples: 2000

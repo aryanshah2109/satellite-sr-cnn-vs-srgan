@@ -1,0 +1,9 @@
+method,mean_psnr_y,mean_ssim_y,mean_lpips
+srgan_v2_finetuned,26.1872,0.7146,0.1387
+srgan_finetuned,25.857,0.7173,0.1487
+srgan_pretrained,26.8227,0.7277,0.2102
+cnn_v2,28.2695,0.7918,0.3109
+cnn,28.256,0.7913,0.312
+srgan_v2_pixel_only,28.1361,0.7867,0.3202
+srgan_pixel_only,28.0481,0.7846,0.3231
+bicubic,25.754,0.6782,0.5507

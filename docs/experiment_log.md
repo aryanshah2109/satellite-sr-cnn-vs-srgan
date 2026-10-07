@@ -12,3 +12,9 @@
 - cnn_v2 | hash=9ecc452b0d15 | stage=cnn | epochs=30 | psnr=24.713467864990236 | time_s=17697.863907399995 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
 - srgan_v2 | hash=607313e8d4a8 | stage=pixel_warmup | epochs=2 | psnr=25.013721221923827 | time_s=1604.8867564999964 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
 - srgan_v2 | hash=607313e8d4a8 | stage=gan | epochs=8 | lpips=0.14962345778942107 | time_s=22462.084036099957 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- cnn_v2_fixed | hash=9ecc452b0d15 | stage=cnn | epochs=23 | psnr=28.72181573486328 | time_s=14077.37239 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- cnn_v2 | hash=9ecc452b0d15 | stage=cnn | epochs=30 | psnr=n/a | time_s=0.00020009999934700318 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- srgan_v2 | hash=607313e8d4a8 | stage=gan | epochs=8 | lpips=n/a | time_s=3.2999996619764715e-06 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- cnn_v2_fixed | hash=9ecc452b0d15 | stage=cnn | epochs=30 | psnr=28.73974545288086 | time_s=18906.0476658 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- srgan_v2_fixed | hash=607313e8d4a8 | stage=pixel_warmup | epochs=2 | psnr=28.60111395263672 | time_s=1669.1016229000015 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- srgan_v2_fixed | hash=607313e8d4a8 | stage=gan | epochs=8 | lpips=0.13705016207695006 | time_s=25916.915738600004 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU

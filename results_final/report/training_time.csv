@@ -1,0 +1,10 @@
+run_name,stage,epochs,minutes
+srgan_gpu,all,8,435.9
+cnn_gpu,cnn,30,539.5
+cnn_v2,cnn,30,295.0
+srgan_v2,pixel_warmup,2,26.7
+srgan_v2,gan,8,374.4
+cnn_v2_fixed,cnn,23,234.6
+cnn_v2_fixed,cnn,30,315.1
+srgan_v2_fixed,pixel_warmup,2,27.8
+srgan_v2_fixed,gan,8,431.9

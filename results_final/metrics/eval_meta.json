@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-10-06T09:29:56+0530",
+  "config_hash": "52231e45f7f9",
+  "git_commit": "b9878c045b58555dc9db98b726e7723fc79c2a29",
+  "device": "cuda",
+  "torch_version": "2.14.1+cu130",
+  "sample_count": 6050,
+  "elapsed_seconds": 339.177952500002,
+  "checkpoints": {
+    "cnn": {
+      "path": "checkpoints\\cnn\\cnn_gpu\\best.pt",
+      "size": 18304443
+    },
+    "srgan_pixel_only": {
+      "path": "checkpoints\\srgan\\srgan_gpu\\pixel_warmup_final.pt",
+      "size": 18781473
+    },
+    "srgan_pretrained": {
+      "path": "checkpoints\\pretrained\\SRGAN_x4-ImageNet.pth.tar",
+      "size": 6284137
+    },
+    "srgan_finetuned": {
+      "path": "checkpoints\\srgan\\srgan_gpu\\best_generator.pth",
+      "size": 6286896
+    },
+    "cnn_v2": {
+      "path": "checkpoints\\cnn\\cnn_v2_fixed\\best.pt",
+      "size": 18304571
+    },
+    "srgan_v2_pixel_only": {
+      "path": "checkpoints\\srgan\\srgan_v2_fixed\\pixel_warmup_final.pt",
+      "size": 18688413
+    },
+    "srgan_v2_finetuned": {
+      "path": "checkpoints\\srgan\\srgan_v2_fixed\\best_generator.pth",
+      "size": 6286960
+    }
+  },
+  "metric_notes": "PSNR_Y and SSIM_Y use plain luma coefficients [0.299, 0.587, 0.114], border 4; LPIPS uses AlexNet."
+}

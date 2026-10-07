@@ -154,5 +154,93 @@
     },
     "elapsed_seconds": 22462.084036099957,
     "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU"
+  },
+  {
+    "run_number": 11,
+    "timestamp": "2026-10-05T14:21:14+05:30",
+    "status": "success",
+    "run_name": "cnn_v2_fixed",
+    "stage": "cnn",
+    "config_hash": "9ecc452b0d15",
+    "epochs": 23,
+    "metrics": {
+      "psnr": 28.72181573486328,
+      "ssim": 0.8015103063583374,
+      "lpips": 0.3070356957912445
+    },
+    "elapsed_seconds": 14077.37239,
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU"
+  },
+  {
+    "run_number": 12,
+    "timestamp": "2026-10-05T15:12:12+05:30",
+    "status": "success",
+    "run_name": "cnn_v2",
+    "stage": "cnn",
+    "config_hash": "9ecc452b0d15",
+    "epochs": 30,
+    "metrics": {},
+    "elapsed_seconds": 0.00020009999934700318,
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU"
+  },
+  {
+    "run_number": 13,
+    "timestamp": "2026-10-05T15:12:14+05:30",
+    "status": "success",
+    "run_name": "srgan_v2",
+    "stage": "gan",
+    "config_hash": "607313e8d4a8",
+    "epochs": 8,
+    "metrics": {},
+    "elapsed_seconds": 3.2999996619764715e-06,
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU"
+  },
+  {
+    "run_number": 14,
+    "timestamp": "2026-10-05T20:30:50+05:30",
+    "status": "success",
+    "run_name": "cnn_v2_fixed",
+    "stage": "cnn",
+    "config_hash": "9ecc452b0d15",
+    "epochs": 30,
+    "metrics": {
+      "psnr": 28.73974545288086,
+      "ssim": 0.8023680963516235,
+      "lpips": 0.3055641760826111
+    },
+    "elapsed_seconds": 18906.0476658,
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU"
+  },
+  {
+    "run_number": 15,
+    "timestamp": "2026-10-05T22:55:37+05:30",
+    "status": "success",
+    "run_name": "srgan_v2_fixed",
+    "stage": "pixel_warmup",
+    "config_hash": "607313e8d4a8",
+    "epochs": 2,
+    "metrics": {
+      "psnr": 28.60111395263672,
+      "ssim": 0.7972575535774231,
+      "lpips": 0.31447531032562254
+    },
+    "elapsed_seconds": 1669.1016229000015,
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU"
+  },
+  {
+    "run_number": 16,
+    "timestamp": "2026-10-05T22:55:37+05:30",
+    "status": "success",
+    "run_name": "srgan_v2_fixed",
+    "stage": "gan",
+    "config_hash": "607313e8d4a8",
+    "epochs": 8,
+    "metrics": {
+      "psnr": 26.418372177124024,
+      "ssim": 0.7165864419937134,
+      "lpips": 0.13705016207695006
+    },
+    "elapsed_seconds": 25916.915738600004,
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU"
   }
 ]
