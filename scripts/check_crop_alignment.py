@@ -19,6 +19,6 @@ def mean_psnr(ds, n=200):
 
 
 if __name__ == "__main__":
-    cfg = load_config("configs/cnn_v2.yaml")
+    cfg = load_config("configs/esrgan_ucmerced.yaml")
     print("train crops (128, aug):", mean_psnr(SRDataset(cfg, "train", "train")))
     print("val full 256 (no crop):", mean_psnr(SRDataset(cfg, "val", "val")))

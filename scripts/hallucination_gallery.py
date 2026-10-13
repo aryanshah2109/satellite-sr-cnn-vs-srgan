@@ -20,27 +20,23 @@ def to_img(t):
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--results", type=Path, default=Path("results_final"))
-    parser.add_argument("--gan", default="srgan_v2_finetuned")
-    parser.add_argument("--cnn", default="cnn_v2")
+    parser.add_argument("--results", type=Path, default=Path("results/ucmerced_v2"))
+    parser.add_argument("--first", default="esrgan_ucmerced")
+    parser.add_argument("--second", default="srgan_ucmerced")
     parser.add_argument("--top", type=int, default=8)
     args = parser.parse_args()
-    cfg = load_config("configs/evaluation.yaml")
+    cfg = load_config("configs/evaluation_ucmerced.yaml")
     device = get_device("auto")
     methods = {str(m.name): m for m in cfg.methods}
     models = {
         name: load_model_for_inference(
             str(methods[name].type), str(methods[name].checkpoint), str(methods[name].model_config), device
         )
-        for name in (args.gan, args.cnn)
+        for name in (args.first, args.second)
     }
     per = pd.read_csv(args.results / "metrics" / "per_image.csv")
-    structure = pd.read_csv(args.results / "metrics" / "structure.csv")
     lpips = per.pivot(index="patch_name", columns="method", values="lpips")
-    edge = structure.pivot(index="patch_name", columns="method", values="edge_prec")
-    gain = (lpips[args.cnn] - lpips[args.gan]).rank(pct=True)
-    loss = (edge[args.cnn] - edge[args.gan]).rank(pct=True)
-    chosen = (gain + loss).sample(args.top, random_state=42).index.tolist()
+    chosen = (lpips[args.first] - lpips[args.second]).abs().nlargest(args.top).index.tolist()
     dataset = SRDataset(cfg, "test", "test")
     index = {row["patch_name"]: i for i, row in enumerate(dataset.rows)}
     out_dir = args.results / "report" / "hallucination_gallery"
@@ -50,13 +46,13 @@ def main() -> int:
         lr = sample["lr"][None].to(device)
         hr = sample["hr"]
         with torch.no_grad():
-            cnn = models[args.cnn](lr).float().clamp(0, 1)[0].cpu()
-            gan = models[args.gan](lr).float().clamp(0, 1)[0].cpu()
+            first = models[args.first](lr).float().clamp(0, 1)[0].cpu()
+            second = models[args.second](lr).float().clamp(0, 1)[0].cpu()
         fig, axes = plt.subplots(2, 4, figsize=(16, 8))
         panels = [
             ("LR (nearest)", torch.nn.functional.interpolate(lr.cpu(), scale_factor=4)[0]),
-            (f"{args.cnn}\nLPIPS {lpips.loc[name, args.cnn]:.3f} edge_prec {edge.loc[name, args.cnn]:.2f}", cnn),
-            (f"{args.gan}\nLPIPS {lpips.loc[name, args.gan]:.3f} edge_prec {edge.loc[name, args.gan]:.2f}", gan),
+            (f"{args.first}\nLPIPS {lpips.loc[name, args.first]:.3f}", first),
+            (f"{args.second}\nLPIPS {lpips.loc[name, args.second]:.3f}", second),
             ("HR", hr),
         ]
         for col, (title, tensor) in enumerate(panels):

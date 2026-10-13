@@ -18,3 +18,12 @@
 - cnn_v2_fixed | hash=9ecc452b0d15 | stage=cnn | epochs=30 | psnr=28.73974545288086 | time_s=18906.0476658 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
 - srgan_v2_fixed | hash=607313e8d4a8 | stage=pixel_warmup | epochs=2 | psnr=28.60111395263672 | time_s=1669.1016229000015 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
 - srgan_v2_fixed | hash=607313e8d4a8 | stage=gan | epochs=8 | lpips=0.13705016207695006 | time_s=25916.915738600004 | GPU=NVIDIA GeForce RTX 4050 Laptop GPU
+- cnn_ucmerced | hash=5dc3a99e7cfa | stage=cnn | epochs=30 | psnr=27.480454800175686 | time_s=6206.530480799999 | GPU=CPU
+- srgan_ucmerced | hash=91e394faa091 | stage=pixel_warmup | epochs=2 | psnr=28.019055821537194 | time_s=686.2483159999992 | GPU=CPU
+- srgan_ucmerced | hash=91e394faa091 | stage=gan | epochs=8 | lpips=0.1720866829741235 | time_s=10873.6051291 | GPU=CPU
+- esrgan_ucmerced | hash=d21384b6446a | stage=pixel_warmup | epochs=4 | psnr=26.5475291582494 | time_s=919.9076404000007 | GPU=CPU
+- esrgan_ucmerced | hash=d21384b6446a | stage=gan | epochs=8 | lpips=0.48213034011180106 | time_s=5588.314763499999 | GPU=CPU
+- srgan_ucmerced | hash=91e394faa091 | stage=pixel_warmup | epochs=2 | psnr=28.019055821537194 | time_s=721.366738 | GPU=CPU
+- srgan_ucmerced | hash=91e394faa091 | stage=gan | epochs=8 | lpips=0.1720866829741235 | time_s=13385.062252 | GPU=CPU
+- esrgan_ucmerced_v2 | hash=9491b43a2a7b | stage=pixel_warmup | epochs=20 | psnr=27.04103406270345 | time_s=4021.5524791 | GPU=NVIDIA GeForce RTX 3050 6GB Laptop GPU
+- esrgan_ucmerced_v2 | hash=9491b43a2a7b | stage=gan | epochs=40 | lpips=0.20342635163684297 | time_s=13304.1261527 | GPU=NVIDIA GeForce RTX 3050 6GB Laptop GPU

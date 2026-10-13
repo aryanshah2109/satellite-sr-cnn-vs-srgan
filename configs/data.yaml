@@ -1,10 +1,11 @@
 _base_: base.yaml
 
 dataset:
-  name: satellite
-  raw_root: data/raw
-  hr_dir: satellite/HR_0.5m/HR_0.5m
-  lr_dir: satellite/LR_2m/LR_2m
+  name: uc_merced_land_use
+  source: image_folder
+  raw_root: ..
+  hr_dir: UCMerced_LandUse/Images
+  lr_dir: null
   file_extension: .tif
   scale_factor: 4
   shape_tolerance: 1.0
@@ -14,7 +15,7 @@ bands:
   expected_dtype: uint8
   max_value: auto
 
-lr_source: provided
+lr_source: synthetic
 
 split:
   seed: 42

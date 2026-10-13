@@ -1,0 +1,54 @@
+_base_:
+  - base.yaml
+  - data.yaml
+
+evaluation:
+  split: test
+  batch_size: 16
+  amp: false
+  num_workers: 0
+  border: 4
+  output_dir: results/ucmerced_v2
+  skip_missing: true
+  lpips_net: alex
+  channels_last: false
+
+methods:
+  - name: bicubic
+    type: bicubic
+  - name: srgan_ucmerced
+    type: srgan
+    model_config: configs/srgan_ucmerced.yaml
+    checkpoint: checkpoints/srgan/srgan_ucmerced/best_generator.pth
+  - name: esrgan_ucmerced
+    type: esrgan
+    model_config: configs/esrgan_ucmerced.yaml
+    checkpoint: checkpoints/esrgan/esrgan_ucmerced_v2/best_generator.pth
+
+comparisons:
+  - [srgan_ucmerced, bicubic]
+  - [esrgan_ucmerced, bicubic]
+  - [esrgan_ucmerced, srgan_ucmerced]
+
+bootstrap:
+  num_resamples: 2000
+  confidence: 0.95
+  seed: 42
+
+visual:
+  num_random: 8
+  num_wins: 3
+  num_fails: 3
+  selection_seed: 42
+  zoom_box_size: 64
+  zoom_select: highest_gradient
+  dpi: 150
+  error_map: true
+  reference_methods: [srgan_ucmerced, esrgan_ucmerced]
+
+inference:
+  tile_size: 128
+  overlap: 16
+  blend: feather
+  amp: false
+  output_format: png

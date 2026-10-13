@@ -21,15 +21,15 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--lr", type=Path, required=True)
     p.add_argument("--hr", type=Path, default=None)
-    p.add_argument("--out", type=Path, default=Path("results_final/demo/compare.png"))
+    p.add_argument("--out", type=Path, default=Path("results/ucmerced/demo/compare.png"))
     p.add_argument("--zoom", type=int, default=32)
     args = p.parse_args()
-    cfg = load_config("configs/evaluation.yaml")
+    cfg = load_config("configs/evaluation_ucmerced.yaml")
     device = get_device("auto")
     methods = {str(m.name): m for m in cfg.methods}
     models = {
         n: load_model_for_inference(str(methods[n].type), str(methods[n].checkpoint), str(methods[n].model_config), device)
-        for n in ("cnn_v2", "srgan_v2_finetuned")
+        for n in ("srgan_ucmerced", "esrgan_ucmerced")
     }
     lr = _input_tensor(args.lr, cfg)
     panels = [

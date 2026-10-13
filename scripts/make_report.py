@@ -51,17 +51,6 @@ def main() -> int:
     figure.savefig(out / "tradeoff.png", dpi=200)
     plt.close(figure)
 
-    if "srgan_v2_finetuned" in wide["psnr_y"].columns and "cnn_v2" in wide["psnr_y"].columns:
-        gap = wide["psnr_y"]["cnn_v2"] - wide["psnr_y"]["srgan_v2_finetuned"]
-        figure, axis = plt.subplots(figsize=(7, 4))
-        axis.hist(gap.dropna(), bins=60)
-        axis.axvline(0, color="k", linewidth=1)
-        axis.set_xlabel("PSNR gap: cnn_v2 minus srgan_v2_finetuned (dB)")
-        axis.set_ylabel("patches")
-        figure.tight_layout()
-        figure.savefig(out / "psnr_gap_hist.png", dpi=200)
-        plt.close(figure)
-
     if args.history.is_file():
         history = json.loads(args.history.read_text(encoding="utf-8"))
         rows = [

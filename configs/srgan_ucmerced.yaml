@@ -1,0 +1,4 @@
+_base_: srgan_v2.yaml
+
+training:
+  run_name: srgan_ucmerced

@@ -195,7 +195,7 @@ def _input_tensor(path: Path, cfg: Config) -> Tensor:
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", choices=("cnn", "srgan"), required=True)
+    parser.add_argument("--model", choices=("srgan", "esrgan"), required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--model-config", type=Path, default=Path("configs/srgan.yaml"))
     parser.add_argument("--input", type=Path, required=True)

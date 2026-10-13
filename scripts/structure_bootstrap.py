@@ -6,8 +6,6 @@ import pandas as pd
 from scripts.cluster_bootstrap import cluster_bootstrap
 
 PAIRS = [
-    ("srgan_finetuned", "cnn_v2"),
-    ("srgan_v2_finetuned", "cnn_v2"),
     ("srgan_v2_finetuned", "srgan_v2_pixel_only"),
     ("srgan_v2_finetuned", "srgan_finetuned"),
 ]

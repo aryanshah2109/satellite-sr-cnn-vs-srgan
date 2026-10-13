@@ -10,7 +10,7 @@ from pathlib import Path
 import torch
 from torch import nn
 
-from losses.adversarial import GANLoss
+from losses.adversarial import GANLoss, RelativisticAverageGANLoss
 from losses.perceptual import VGGPerceptualLoss
 from losses.reconstruction import PixelLoss
 from evaluation.metrics import LPIPSMetric
@@ -66,7 +66,9 @@ class SRGANTrainer:
             evenly_spaced_indices(len(val_dataset), val_count),
             num_workers=val_workers,
         )
-        self.checkpoint_dir = setup_run(cfg, args.run_name, "srgan")
+        model_name = str(cfg.model.name)
+        checkpoint_group = "esrgan" if model_name.startswith("esrgan") else "srgan"
+        self.checkpoint_dir = setup_run(cfg, args.run_name, checkpoint_group)
         self.writer = create_writer(cfg, args.run_name)
         self.global_step = 0
         self.best_metric: float | None = None
@@ -76,7 +78,12 @@ class SRGANTrainer:
 
     def _load_pretrained(self) -> None:
         if not self.pretrained_loaded:
-            load_pretrained_weights(Path(self.cfg.model.pretrained_weights), self.generator, strict=True)
+            pretrained_path = self.cfg.model.get("pretrained_weights")
+            if not pretrained_path:
+                self.pretrained_loaded = True
+                LOGGER.info("Generator initialization source: random initialization")
+                return
+            load_pretrained_weights(Path(pretrained_path), self.generator, strict=True)
             self.pretrained_loaded = True
             LOGGER.info("Generator initialization source: ImageNet pretrained weights")
 
@@ -108,7 +115,7 @@ class SRGANTrainer:
             self._load_project_generator(warmup_path, "pixel warmup checkpoint")
             return
         LOGGER.warning(
-            "Pixel warmup checkpoint was skipped; falling back to ImageNet pretrained weights"
+            "Pixel warmup checkpoint was skipped; using configured initialization"
         )
         self._load_pretrained()
 
@@ -149,10 +156,12 @@ class SRGANTrainer:
                 tuple(self.cfg.training.perceptual.mean),
                 tuple(self.cfg.training.perceptual.std),
             ).to(self.device)
-            gan_loss = GANLoss(
-                str(self.cfg.training.adversarial.kind),
-                float(self.cfg.training.adversarial.real_label_smoothing),
-            ).to(self.device)
+            loss_kind = str(self.cfg.training.adversarial.kind).lower()
+            smoothing = float(self.cfg.training.adversarial.real_label_smoothing)
+            if loss_kind == "relativistic_bce":
+                gan_loss = RelativisticAverageGANLoss(smoothing).to(self.device)
+            else:
+                gan_loss = GANLoss(loss_kind, smoothing).to(self.device)
         start_epoch = 0
         stage_step = 0
         if resume_path is not None:
@@ -259,7 +268,17 @@ class SRGANTrainer:
                         with amp_context(self.device, bool(self.cfg.training.amp)):
                             pixel_value = pixel_loss(fake.float(), hr.float())
                             perceptual_value = perceptual_loss(fake.float(), hr.float())
-                            adversarial_value = gan_loss.generator_loss(self.discriminator(fake))
+                            if isinstance(gan_loss, RelativisticAverageGANLoss):
+                                real_logits_for_generator = self.discriminator(hr)
+                                fake_logits_for_generator = self.discriminator(fake)
+                                adversarial_value = gan_loss.generator_loss(
+                                    real_logits_for_generator,
+                                    fake_logits_for_generator,
+                                )
+                            else:
+                                adversarial_value = gan_loss.generator_loss(
+                                    self.discriminator(fake)
+                                )
                             g_loss = (
                                 float(stage_cfg.w_pixel) * pixel_value
                                 + float(stage_cfg.w_perceptual) * perceptual_value

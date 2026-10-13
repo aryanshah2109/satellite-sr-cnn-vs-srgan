@@ -7,7 +7,7 @@ from typing import Any
 
 from torch import nn
 
-from models.cnn_sr import CNNSuperResolution
+from models.esrgan_generator import ESRGANGenerator
 from models.srgan_discriminator import SRGANDiscriminator
 from models.srgan_generator import SRGANGenerator
 from utils.config import Config
@@ -28,7 +28,7 @@ def _model_values(cfg: Config) -> dict[str, Any]:
 
 
 def build_model(cfg: Config) -> nn.Module:
-    """Build the configured CNN or SRGAN generator."""
+    """Build the configured SRGAN or ESRGAN generator."""
     values = _model_values(cfg)
     name = str(values.pop("name"))
     ignored_keys = (
@@ -41,13 +41,13 @@ def build_model(cfg: Config) -> nn.Module:
     )
     for key in ignored_keys:
         values.pop(key, None)
-    if name in {"cnn", "cnn_sr", "edsr_lite"}:
-        model = CNNSuperResolution(**values)
-    elif name in {"srgan", "srgan_generator", "srresnet"}:
+    if name in {"srgan", "srgan_generator", "srresnet"}:
         model = SRGANGenerator(
             num_blocks=values.pop("num_blocks", values.pop("num_rcb", 16)),
             **values,
         )
+    elif name in {"esrgan", "esrgan_generator", "rrdbnet"}:
+        model = ESRGANGenerator(**values)
     else:
         raise ValueError(f"Unknown generator model name: {name}")
     LOGGER.info("Built %s with %s trainable parameters", name, count_parameters(model))
@@ -77,7 +77,7 @@ def log_model_summary(model: nn.Module, logger: logging.Logger = LOGGER) -> None
 
 
 __all__ = [
-    "CNNSuperResolution",
+    "ESRGANGenerator",
     "SRGANDiscriminator",
     "SRGANGenerator",
     "build_discriminator",

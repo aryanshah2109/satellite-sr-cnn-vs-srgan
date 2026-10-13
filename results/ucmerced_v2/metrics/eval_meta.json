@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-10-12T14:33:13+0530",
+  "config_hash": "e627eee92318",
+  "git_commit": "66c7cbe8c7413d7b1dc736abf0030746cbb86ffc",
+  "device": "cuda",
+  "torch_version": "2.14.1+cu126",
+  "sample_count": 303,
+  "elapsed_seconds": 14.136762199999794,
+  "checkpoints": {
+    "srgan_ucmerced": {
+      "path": "checkpoints\\srgan\\srgan_ucmerced\\best_generator.pth",
+      "size": 6283696
+    },
+    "esrgan_ucmerced": {
+      "path": "checkpoints\\esrgan\\esrgan_ucmerced_v2\\best_generator.pth",
+      "size": 19915801
+    }
+  },
+  "metric_notes": "PSNR_Y and SSIM_Y use plain luma coefficients [0.299, 0.587, 0.114], border 4; LPIPS uses AlexNet."
+}

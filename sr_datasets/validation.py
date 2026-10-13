@@ -14,7 +14,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn.functional as functional
+from PIL import Image
 
+from sr_datasets.degradation import degrade_image
 from sr_datasets.raster_io import raster_metadata, read_raster
 from utils.config import Config
 
@@ -69,6 +71,97 @@ def _dataset_directories(cfg: Config) -> tuple[Path, Path]:
     """Resolve HR and LR input directories from configuration."""
     raw_root = _path_from_config(cfg, cfg.dataset.raw_root)
     return raw_root / cfg.dataset.hr_dir, raw_root / cfg.dataset.lr_dir
+
+
+def _inspect_image_folder(cfg: Config) -> DatasetReport:
+    """Inspect class-organized HR images without requiring paired LR files."""
+    raw_root = _path_from_config(cfg, cfg.dataset.raw_root)
+    image_root = raw_root / cfg.dataset.hr_dir
+    if not image_root.is_dir():
+        raise FileNotFoundError(f"Configured image folder does not exist: {image_root}")
+
+    extensions = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"}
+    records: list[dict[str, Any]] = []
+    problems: list[str] = []
+    class_counts: Counter[str] = Counter()
+    for class_dir in sorted(path for path in image_root.iterdir() if path.is_dir()):
+        for path in sorted(class_dir.iterdir()):
+            if not path.is_file() or path.suffix.lower() not in extensions:
+                continue
+            tile_id = f"{class_dir.name}__{path.stem}"
+            try:
+                with Image.open(path) as image:
+                    rgb = image.convert("RGB")
+                    width, height = rgb.size
+                    chw = np.moveaxis(np.asarray(rgb, dtype=np.float32) / 255.0, -1, 0)
+                if width < int(cfg.patching.hr_patch_size) or height < int(
+                    cfg.patching.hr_patch_size
+                ):
+                    raise ValueError(
+                        f"image is {width}x{height}; patch size is "
+                        f"{cfg.patching.hr_patch_size}"
+                    )
+                records.append(
+                    {
+                        "tile_id": tile_id,
+                        "city": class_dir.name,
+                        "hr_path": str(path.resolve()),
+                        "lr_path": "",
+                        "hr_metadata": {
+                            "width": width,
+                            "height": height,
+                            "band_count": 3,
+                            "dtype": "uint8",
+                            "crs": None,
+                            "pixel_size": None,
+                            "nodata": None,
+                        },
+                        "lr_metadata": {
+                            "width": width // int(cfg.dataset.scale_factor),
+                            "height": height // int(cfg.dataset.scale_factor),
+                            "band_count": 3,
+                            "dtype": "uint8",
+                            "crs": None,
+                            "pixel_size": None,
+                            "nodata": None,
+                        },
+                        "nodata_fraction": 0.0,
+                        "band_means": chw.mean(axis=(1, 2)).tolist(),
+                        "band_stds": chw.std(axis=(1, 2)).tolist(),
+                    }
+                )
+                class_counts[class_dir.name] += 1
+            except (OSError, ValueError) as error:
+                problems.append(f"Excluded image {path}: {error}")
+
+    if not records:
+        raise ValueError(f"No supported images found under {image_root}")
+    means = np.asarray([record["band_means"] for record in records], dtype=np.float32)
+    stds = np.asarray([record["band_stds"] for record in records], dtype=np.float32)
+    report = DatasetReport(
+        dataset=str(cfg.dataset.name),
+        reader_backend="Pillow RGB",
+        tiles=records,
+        valid_tile_ids=[record["tile_id"] for record in records],
+        tiles_per_city=dict(sorted(class_counts.items())),
+        aggregate_statistics={
+            "per_band_mean": means.mean(axis=0).tolist(),
+            "per_band_std": stds.mean(axis=0).tolist(),
+            "nodata_fraction_mean": 0.0,
+        },
+        problems=problems,
+        counts={
+            "hr_files": len(records),
+            "lr_files": 0,
+            "valid_tiles": len(records),
+            "excluded_tiles": len(problems),
+            "unreadable_files": len(problems),
+        },
+    )
+    _save_report(cfg, report)
+    _save_data_card(cfg, report)
+    LOGGER.info("Inspected %s RGB images across %s classes", len(records), len(class_counts))
+    return report
 
 
 def _city_from_tile(cfg: Config, tile_id: str) -> str:
@@ -148,17 +241,18 @@ def _save_data_card(cfg: Config, report: DatasetReport) -> None:
     issues = (
         "\n".join(f"- {problem}" for problem in report.problems) or "- None reported"
     )
-    card = f"""# Satellite SR data card
+    card = f"""# Super-resolution data card
 
 ## Summary
 
-- Valid paired tiles: {len(report.valid_tile_ids)}
-- Cities: {len(report.tiles_per_city)}
+- Valid HR images: {len(report.valid_tile_ids)}
+- Classes: {len(report.tiles_per_city)}
 - HR sizes: {', '.join(hr_sizes) or 'none'}
 - LR sizes: {', '.join(lr_sizes) or 'none'}
 - Band counts: {bands or 'none'}
 - HR dtypes: {', '.join(dtypes) or 'none'}
 - Reader backend: {report.reader_backend}
+- LR source: {'synthetic downsampling' if report.counts['lr_files'] == 0 else 'provided pairs'}
 
 ## Tiles per city
 
@@ -181,8 +275,10 @@ def _save_data_card(cfg: Config, report: DatasetReport) -> None:
 
 
 def inspect_dataset(cfg: Config) -> DatasetReport:
-    """Inspect configured HR/LR tiles and save a detailed validation report."""
+    """Inspect configured source images and save a detailed validation report."""
     try:
+        if str(getattr(cfg.dataset, "source", "geotiff")) == "image_folder":
+            return _inspect_image_folder(cfg)
         hr_dir, lr_dir = _dataset_directories(cfg)
         extension = str(cfg.dataset.file_extension)
         hr_tiles = _list_tiles(hr_dir, extension)
@@ -370,9 +466,12 @@ def check_alignment(cfg: Config) -> dict[str, Any]:
             hr = read_raster(
                 record["hr_path"], list(cfg.bands.indices), cfg.bands.max_value
             )
-            lr = read_raster(
-                record["lr_path"], list(cfg.bands.indices), cfg.bands.max_value
-            )
+            if cfg.lr_source == "synthetic":
+                lr = degrade_image(hr, int(cfg.dataset.scale_factor), cfg.degradation)
+            else:
+                lr = read_raster(
+                    record["lr_path"], list(cfg.bands.indices), cfg.bands.max_value
+                )
             target_height = lr.shape[-2] * int(cfg.dataset.scale_factor)
             target_width = lr.shape[-1] * int(cfg.dataset.scale_factor)
             hr = hr[:, :target_height, :target_width]

@@ -5,14 +5,10 @@ import numpy as np
 import pandas as pd
 
 PAIRS = [
-    ("cnn", "bicubic"),
     ("srgan_finetuned", "bicubic"),
-    ("srgan_finetuned", "cnn"),
     ("srgan_finetuned", "srgan_pretrained"),
     ("srgan_finetuned", "srgan_pixel_only"),
-    ("cnn_v2", "cnn"),
     ("srgan_v2_finetuned", "srgan_finetuned"),
-    ("srgan_v2_finetuned", "cnn_v2"),
     ("srgan_v2_finetuned", "srgan_v2_pixel_only"),
     ("srgan_v2_finetuned", "srgan_pretrained"),
 ]

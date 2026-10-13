@@ -242,5 +242,149 @@
     },
     "elapsed_seconds": 25916.915738600004,
     "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU"
+  },
+  {
+    "run_number": 17,
+    "timestamp": "2026-10-11T12:01:49+05:30",
+    "status": "success",
+    "run_name": "cnn_ucmerced",
+    "stage": "cnn",
+    "config_hash": "5dc3a99e7cfa",
+    "epochs": 30,
+    "metrics": {
+      "psnr": 27.480454800175686,
+      "ssim": 0.7620671317468282,
+      "lpips": 0.32920752572857476
+    },
+    "elapsed_seconds": 6206.530480799999,
+    "gpu": "CPU"
+  },
+  {
+    "run_number": 18,
+    "timestamp": "2026-10-11T14:37:04+05:30",
+    "status": "success",
+    "run_name": "srgan_ucmerced",
+    "stage": "pixel_warmup",
+    "config_hash": "91e394faa091",
+    "epochs": 2,
+    "metrics": {
+      "psnr": 28.019055821537194,
+      "ssim": 0.7814298291611516,
+      "lpips": 0.2991028085253597
+    },
+    "elapsed_seconds": 686.2483159999992,
+    "gpu": "CPU"
+  },
+  {
+    "run_number": 19,
+    "timestamp": "2026-10-11T14:37:04+05:30",
+    "status": "success",
+    "run_name": "srgan_ucmerced",
+    "stage": "gan",
+    "config_hash": "91e394faa091",
+    "epochs": 8,
+    "metrics": {
+      "psnr": 26.604606279360702,
+      "ssim": 0.7396210852791282,
+      "lpips": 0.1720866829741235
+    },
+    "elapsed_seconds": 10873.6051291,
+    "gpu": "CPU"
+  },
+  {
+    "run_number": 20,
+    "timestamp": "2026-10-11T21:43:26+05:30",
+    "status": "success",
+    "run_name": "esrgan_ucmerced",
+    "stage": "pixel_warmup",
+    "config_hash": "d21384b6446a",
+    "epochs": 4,
+    "metrics": {
+      "psnr": 26.5475291582494,
+      "ssim": 0.7286670317057691,
+      "lpips": 0.40859663213779723
+    },
+    "elapsed_seconds": 919.9076404000007,
+    "gpu": "CPU"
+  },
+  {
+    "run_number": 21,
+    "timestamp": "2026-10-11T21:43:26+05:30",
+    "status": "success",
+    "run_name": "esrgan_ucmerced",
+    "stage": "gan",
+    "config_hash": "d21384b6446a",
+    "epochs": 8,
+    "metrics": {
+      "psnr": 17.868083031348934,
+      "ssim": 0.4303937564098757,
+      "lpips": 0.48213034011180106
+    },
+    "elapsed_seconds": 5588.314763499999,
+    "gpu": "CPU"
+  },
+  {
+    "run_number": 22,
+    "timestamp": "2026-10-12T13:21:00+05:30",
+    "status": "success",
+    "run_name": "srgan_ucmerced",
+    "stage": "pixel_warmup",
+    "config_hash": "91e394faa091",
+    "epochs": 2,
+    "metrics": {
+      "psnr": 28.019055821537194,
+      "ssim": 0.7814298291611516,
+      "lpips": 0.2991028085253597
+    },
+    "elapsed_seconds": 721.366738,
+    "gpu": "CPU"
+  },
+  {
+    "run_number": 23,
+    "timestamp": "2026-10-12T13:21:00+05:30",
+    "status": "success",
+    "run_name": "srgan_ucmerced",
+    "stage": "gan",
+    "config_hash": "91e394faa091",
+    "epochs": 8,
+    "metrics": {
+      "psnr": 26.604606279360702,
+      "ssim": 0.7396210852791282,
+      "lpips": 0.1720866829741235
+    },
+    "elapsed_seconds": 13385.062252,
+    "gpu": "CPU"
+  },
+  {
+    "run_number": 24,
+    "timestamp": "2026-10-12T14:28:12+05:30",
+    "status": "success",
+    "run_name": "esrgan_ucmerced_v2",
+    "stage": "pixel_warmup",
+    "config_hash": "9491b43a2a7b",
+    "epochs": 20,
+    "metrics": {
+      "psnr": 27.04103406270345,
+      "ssim": 0.7662095789815865,
+      "lpips": 0.31721194507249817
+    },
+    "elapsed_seconds": 4021.5524791,
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+  },
+  {
+    "run_number": 25,
+    "timestamp": "2026-10-12T14:28:12+05:30",
+    "status": "success",
+    "run_name": "esrgan_ucmerced_v2",
+    "stage": "gan",
+    "config_hash": "9491b43a2a7b",
+    "epochs": 40,
+    "metrics": {
+      "psnr": 24.783070882161457,
+      "ssim": 0.6746800906128354,
+      "lpips": 0.20342635163684297
+    },
+    "elapsed_seconds": 13304.1261527,
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
   }
 ]

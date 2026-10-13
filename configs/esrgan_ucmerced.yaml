@@ -1,0 +1,38 @@
+_base_: srgan_v2.yaml
+
+model:
+  name: esrgan_generator
+  channels: 48
+  growth_channels: 24
+  num_blocks: 12
+  pretrained_weights: null
+  discriminator:
+    channels: 48
+
+device:
+  preferred: cuda
+
+training:
+  run_name: esrgan_ucmerced_v2
+  batch_size: 4
+  num_workers: 4
+  channels_last: true
+  amp: true
+  freeze_generator_bn: false
+  adversarial:
+    kind: relativistic_bce
+    real_label_smoothing: 0.0
+  stages:
+    pixel_warmup:
+      epochs: 20
+    gan:
+      epochs: 40
+      w_pixel: 0.01
+      w_perceptual: 1.0
+      w_adv: 0.005
+
+dataloader:
+  batch_size: 4
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 2

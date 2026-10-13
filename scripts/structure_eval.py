@@ -12,7 +12,7 @@ from utils.config import load_config
 from utils.image_utils import crop_border, get_device, rgb_to_y
 
 SOBEL = torch.tensor([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], dtype=torch.float32).view(1, 1, 3, 3)
-DEFAULT_METHODS = "bicubic,cnn_v2,srgan_pretrained,srgan_v2_pixel_only,srgan_finetuned,srgan_v2_finetuned"
+DEFAULT_METHODS = "bicubic,srgan_ucmerced,esrgan_ucmerced"
 
 
 def grad_mag(y):
@@ -65,7 +65,7 @@ def main() -> int:
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--max-samples", type=int, default=None)
     args = parser.parse_args()
-    cfg = load_config("configs/evaluation.yaml")
+    cfg = load_config("configs/evaluation_ucmerced.yaml")
     device = get_device("auto")
     requested = args.methods.split(",")
     models = {}

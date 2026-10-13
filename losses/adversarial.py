@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import torch
 from torch import Tensor, nn
 
 
@@ -30,3 +31,34 @@ class GANLoss(nn.Module):
         real_loss = self.criterion(real_logits, self._target(real_logits, real_value))
         fake_loss = self.criterion(fake_logits, self._target(fake_logits, 0.0))
         return (real_loss + fake_loss) / 2.0
+
+
+class RelativisticAverageGANLoss(nn.Module):
+    """Relativistic-average BCE losses used by ESRGAN-style training."""
+
+    def __init__(self, real_label_smoothing: float = 0.0) -> None:
+        super().__init__()
+        self.real_label_smoothing = float(real_label_smoothing)
+        self.criterion = nn.BCEWithLogitsLoss()
+
+    def discriminator_loss(self, real_logits: Tensor, fake_logits: Tensor) -> Tensor:
+        """Train D to rank real samples above the average generated sample."""
+        real_relative = real_logits - fake_logits.mean()
+        fake_relative = fake_logits - real_logits.mean()
+        real_target = torch.full_like(real_relative, 1.0 - self.real_label_smoothing)
+        fake_target = torch.zeros_like(fake_relative)
+        return (
+            self.criterion(real_relative, real_target)
+            + self.criterion(fake_relative, fake_target)
+        ) / 2.0
+
+    def generator_loss(self, real_logits: Tensor, fake_logits: Tensor) -> Tensor:
+        """Train G to make generated samples rank above real samples."""
+        real_relative = real_logits - fake_logits.mean()
+        fake_relative = fake_logits - real_logits.mean()
+        real_target = torch.zeros_like(real_relative)
+        fake_target = torch.ones_like(fake_relative)
+        return (
+            self.criterion(real_relative, real_target)
+            + self.criterion(fake_relative, fake_target)
+        ) / 2.0

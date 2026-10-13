@@ -56,7 +56,10 @@ def _checkpoint_path(cfg: Config, method: Config) -> Path | None:
     if checkpoint != "auto":
         return Path(checkpoint)
     method_type = str(method.type)
-    family = "cnn" if method_type == "cnn" else "srgan"
+    if method_type == "esrgan":
+        family = "esrgan"
+    else:
+        family = "srgan"
     root = Path(cfg.paths.checkpoints_dir) / family
     run_dirs = sorted((path for path in root.iterdir() if path.is_dir()), key=lambda path: path.stat().st_mtime, reverse=True) if root.is_dir() else []
     preferred = ("best.pt", "best_generator.pth", "best_gan.pt")

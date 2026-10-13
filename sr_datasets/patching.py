@@ -80,6 +80,13 @@ def _read_array(
     return read_raster(path, bands, max_value)
 
 
+def _read_rgb_image(path: str | Path) -> np.ndarray:
+    """Load an RGB image as normalized CHW float32 data."""
+    with Image.open(path) as image:
+        array = np.asarray(image.convert("RGB"), dtype=np.float32) / 255.0
+    return np.moveaxis(array, -1, 0)
+
+
 def build_patches(cfg: Config, split: str, force: bool = False) -> dict[str, int]:
     """Extract one split's aligned patches from validated tile pairs."""
     try:
@@ -103,9 +110,12 @@ def build_patches(cfg: Config, split: str, force: bool = False) -> dict[str, int
             if tile_id not in tile_map:
                 raise ValueError(f"Split tile {tile_id} is absent from dataset report")
             tile = tile_map[tile_id]
-            hr = read_raster(
-                tile["hr_path"], list(cfg.bands.indices), cfg.bands.max_value
-            )
+            if str(getattr(cfg.dataset, "source", "geotiff")) == "image_folder":
+                hr = _read_rgb_image(tile["hr_path"])
+            else:
+                hr = read_raster(
+                    tile["hr_path"], list(cfg.bands.indices), cfg.bands.max_value
+                )
             lr = None
             if cfg.lr_source == "provided":
                 lr = read_raster(
